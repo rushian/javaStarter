@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
+
 import java.util.HashMap;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,7 +24,8 @@ public class AppTest
         options.addArguments("--remote-allow-origins=*");
         // Aponta onde está o Chrome Driver
         // System.setProperty("webdriver.chrome.driver", "drivers/chrome/chromedriver.exe");
-        driver = new ChromeDriver(options); // Instancia / Liga o Chrome Driver
+        //abrir navegador
+        driver = new ChromeDriver(options); 
         js = (JavascriptExecutor) driver;
         new HashMap<String, Object>();
     }
@@ -32,8 +35,11 @@ public class AppTest
     }
     @Test
     public void comprarPassagem() {
+        //navegar ate pagina
         driver.get("https://blazedemo.com/");
-        driver.manage().window().setSize(new Dimension(1296, 696));
+        //maximizar janela
+        driver.manage().window().maximize();
+        //escolher origem e destino
         driver.findElement(By.name("fromPort")).click();
         driver.findElement(By.name("fromPort")).click();
         {
@@ -46,7 +52,10 @@ public class AppTest
             dropdown.findElement(By.xpath("//option[. = 'Berlin']")).click();
         }
         driver.findElement(By.cssSelector(".btn-primary")).click();
+        //escolher voo
+        (new Actions(driver)).pause(java.time.Duration.ofSeconds(2)).perform();
         driver.findElement(By.cssSelector("tr:nth-child(1) .btn")).click();
+        //realizar pagamento
         driver.findElement(By.id("cardType")).click();
         {
             WebElement dropdown = driver.findElement(By.id("cardType"));
@@ -54,6 +63,9 @@ public class AppTest
         }
         driver.findElement(By.id("rememberMe")).click();
         driver.findElement(By.cssSelector(".btn-primary")).click();
+
+        (new Actions(driver)).pause(java.time.Duration.ofSeconds(3)).perform();
+        //realizar validacoes
         assertThat(driver.findElement(By.cssSelector("h1")).getText(), is("Thank you for your purchase today!"));
         assertThat(driver.findElement(By.cssSelector("tr:nth-child(3) > td:nth-child(2)")).getText(), is("555 USD"));
     }
