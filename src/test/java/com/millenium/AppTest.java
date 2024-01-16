@@ -8,8 +8,12 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -20,12 +24,14 @@ public class AppTest
     @BeforeEach
     public void setUp() {
         WebDriverManager.chromedriver().setup();
+        
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
         // Aponta onde está o Chrome Driver
         // System.setProperty("webdriver.chrome.driver", "drivers/chrome/chromedriver.exe");
         //abrir navegador
         driver = new ChromeDriver(options); 
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(15000));
         js = (JavascriptExecutor) driver;
         new HashMap<String, Object>();
     }
